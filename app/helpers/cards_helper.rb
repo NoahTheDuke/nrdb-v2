@@ -275,10 +275,10 @@ module CardsHelper
   def import
     path = '../netrunner-data/edn/'
 
-    # import_sides path
-    # import_factions path
-    # import_types path
-    # import_subtypes path
+    import_sides path
+    import_factions path
+    import_types path
+    import_subtypes path
     import_cards path: path
 
     import_cycles path
