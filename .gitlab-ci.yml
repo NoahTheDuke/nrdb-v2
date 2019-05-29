@@ -2,14 +2,19 @@
 
 image: ruby:2.5.3
 
+variables:
+  POSTGRES_DB: test_db
+  POSTGRES_USER: runner
+  POSTGRES_PASSWORD: ""
+
 services:
   - postgres:10.1
 
 before_script: 
-  - apt-get update -qq && apt-get install -y -qq sqlite3 libsqlite3-dev nodejs postgresql 
+  - apt-get update -qq && apt-get install -y -qq sqlite3 libsqlite3-dev nodejs postgresql postgresql-contrib libpq-dev cmake
   - gem install bundler --no-document
   - bundle install
-  - cp config/database.yml.ci config/database.yml
+  - cp config/database.ci.yml config/database.yml
   - bundle exec rails db:create RAILS_ENV=test
   - bundle exec rails db:migrate RAILS_ENV=test
 
