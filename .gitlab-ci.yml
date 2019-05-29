@@ -1,7 +1,17 @@
+# https://medium.com/weareevermore/set-up-gitlab-ci-for-rails-applications-cf0117128bce
+
+image: ruby:2.5.3
+
+services:
+  - postgres:10.1
+
 before_script: 
   - apt-get update -qq && apt-get install -y -qq sqlite3 libsqlite3-dev nodejs postgresql 
   - gem install bundler --no-document
   - bundle install
+  - cp config/database.yml.ci config/database.yml
+  - bundle exec rails db:create RAILS_ENV=test
+  - bundle exec rails db:migrate RAILS_ENV=test
 
 test:
   script:
