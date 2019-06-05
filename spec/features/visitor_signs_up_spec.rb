@@ -8,7 +8,7 @@ feature 'Visitor signs up' do
     fill_in 'Password', :with => 'password'
     fill_in 'Password confirmation', :with => 'password'
     click_button 'Sign up'
-    expect(page).to have_text('Welcome! You have signed up successfully.')
+    expect(page).to have_text('A message with a confirmation link has been sent to your email address.')
   end
 
   scenario 'with invalid email' do
