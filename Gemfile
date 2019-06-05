@@ -8,7 +8,7 @@ gem 'coffee-rails',            '4.2.2'
 gem 'devise',                  '4.6.2'
 gem 'edn_turbo',               '0.5.7'
 gem 'faker',                   '1.9.3'
-gem 'gravatar_image_tag' 
+gem 'gravatar_image_tag'
 gem 'jbuilder',                '2.7.0'
 gem 'jquery-rails',            '4.3.1'
 gem 'pg'
@@ -20,8 +20,11 @@ gem 'uglifier',                '3.2.0'
 gem 'will_paginate',           '3.1.6'
 
 group :development, :test do
-  gem 'byebug',            '9.0.6', platform: :mri
+  gem 'byebug', '9.0.6', platform: :mri
+  gem 'capybara'
+  gem 'database_cleaner'
   gem 'factory_bot_rails', '5.0.1'
+  gem 'rspec-rails', '~> 3.5'
 end
 
 group :development do
