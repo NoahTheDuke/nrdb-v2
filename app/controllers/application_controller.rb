@@ -1,6 +1,5 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
-  include SessionsHelper
   include ActionView::Helpers::TextHelper
 
   # based on https://stackoverflow.com/questions/53869028/how-to-add-404-error-page-in-ruby-on-rails-app
