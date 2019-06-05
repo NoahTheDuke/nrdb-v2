@@ -10,6 +10,7 @@
         </li>
         <li><%= link_to 'Sets', nr_sets_path %></li>
         <% if user_signed_in? %>
+          <%= image_tag gravatar_image_url(current_user.email, filetype: :png, rating: 'pg', secure:false ), size: "30x30", :class => "img-circle" %>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <b class="caret"></b>
