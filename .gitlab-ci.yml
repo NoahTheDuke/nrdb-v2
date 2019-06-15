@@ -11,7 +11,7 @@ services:
   - postgres:10.1
 
 before_script: 
-  - apt-get update -qq && apt-get install -y -qq sqlite3 libsqlite3-dev nodejs postgresql postgresql-contrib libpq-dev cmake
+  - apt-get update -qq && apt-get install -y -qq sqlite3 libsqlite3-dev nodejs postgresql postgresql-contrib libpq-dev cmake ruby-rspec-core
   - gem install bundler --no-document
   - bundle install
   - cp config/database.ci.yml config/database.yml
@@ -20,4 +20,4 @@ before_script:
 
 test:
   script:
-    - rake test
+    - rspec spec
