@@ -8,7 +8,7 @@
       <span class="icon icon-<%= card.faction.code.dasherize %>"></span>
    </td>
    <td data-th="Cost">
-      <%= card.cost %>
+      <%= card.cost || card.advancement_requirement %>
    </td>
    <td data-th="Type">
       <%= raw card.type_builder %>

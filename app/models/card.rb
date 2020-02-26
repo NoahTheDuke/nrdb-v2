@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Card < ApplicationRecord
   belongs_to :side
   belongs_to :faction
@@ -26,17 +28,17 @@ class Card < ApplicationRecord
   end
 
   def type_builder
-    c_type = "<strong>#{card_type.name}"
+    c_type = "<strong>#{card_type.name}".dup
     c_type << if subtypes.present?
                 ":</strong> #{subtypes}"
               else
                 '</strong>'
               end
-    c_type
+    c_type.freeze
   end
 
   def format_text
-    t = text || ''
+    t = text || ''.dup
 
     t.gsub(/(\[subroutine\])/, '<abbr class="icon icon-subroutine">\1</abbr>')
      .gsub(/(\[credit\])/, '<abbr class="icon icon-credit">\1</abbr>')
@@ -62,7 +64,8 @@ class Card < ApplicationRecord
 
   def influence_builder
     if influence_cost.present?
-      inf = "<span class=\"#{faction.code.dasherize}\">#{'●' * influence_cost}</span>"
+      inf = "<span class=\"#{faction.code.dasherize}\">".dup
+      inf << "#{'●' * influence_cost}</span>"
       inf << '○' * (5 - influence_cost)
       inf
     else

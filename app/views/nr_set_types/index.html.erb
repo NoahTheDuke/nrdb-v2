@@ -1,6 +1,6 @@
 <% provide(:title, 'Set Types') %>
 
-<%= will_paginate %>
+<%== pagy_bootstrap_nav(@pagy) %>
 
 <table class="rwd-table table table-striped table-condensed">
    <thead>
@@ -12,6 +12,6 @@
    <%= render @nr_set_types %>
 </table>
 
-<%= will_paginate %>
+<%== pagy_bootstrap_nav(@pagy) %>
 
 <%= link_to 'New Set Type', new_nr_set_type_path %>

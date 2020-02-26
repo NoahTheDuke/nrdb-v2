@@ -1,10 +1,11 @@
+# frozen_string_literal: true
+
 class CardsController < ApplicationController
   def index
-    @cards = Card.includes(%i[side faction card_type subtypes],
+    @cards = Card.includes(%i[side faction card_type],
                            printings: [nr_set: [:nr_cycle]])
                  .order(:code)
-                 .all
-                 .paginate(page: params[:page])
+    @pagy, @cards = pagy(@cards)
   end
 
   def show

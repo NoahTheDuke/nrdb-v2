@@ -1,6 +1,9 @@
+# frozen_string_literal: true
+
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   include ActionView::Helpers::TextHelper
+  include Pagy::Backend
 
   # based on https://stackoverflow.com/questions/53869028/how-to-add-404-error-page-in-ruby-on-rails-app
   # rescue_from Exception, with: :render_404

@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class LegalityTypesController < ApplicationController
-  before_action :set_legality_type, only: [:show, :edit, :update, :destroy]
+  before_action :set_legality_type, only: %i[show edit update destroy]
 
   # GET /legality_types
   # GET /legality_types.json
@@ -9,8 +11,7 @@ class LegalityTypesController < ApplicationController
 
   # GET /legality_types/1
   # GET /legality_types/1.json
-  def show
-  end
+  def show; end
 
   # GET /legality_types/new
   def new
@@ -18,8 +19,7 @@ class LegalityTypesController < ApplicationController
   end
 
   # GET /legality_types/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /legality_types
   # POST /legality_types.json
@@ -62,13 +62,14 @@ class LegalityTypesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_legality_type
-      @legality_type = LegalityType.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def legality_type_params
-      params.require(:legality_type).permit(:name, :code)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_legality_type
+    @legality_type = LegalityType.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def legality_type_params
+    params.require(:legality_type).permit(:name, :code)
+  end
 end

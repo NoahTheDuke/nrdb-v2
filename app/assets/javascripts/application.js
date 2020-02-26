@@ -12,6 +12,9 @@
 //
 //= require jquery
 //= require bootstrap
+//= require pagy
 //= require rails-ujs
 //= require turbolinks
 //= require_tree .
+
+window.addEventListener("turbolinks:load", Pagy.init);

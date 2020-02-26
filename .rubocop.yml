@@ -1,5 +1,3 @@
-inherit_from: .rubocop_todo.yml
-
 AllCops:
   TargetRubyVersion: 2.5
   CacheRootDirectory: ./tmp/cache
@@ -14,9 +12,6 @@ AllCops:
 Metrics/LineLength:
   Max: 88
 
-Style/Documentation:
-  Enabled: false
-
 Metrics/AbcSize:
   Enabled: false
 
@@ -26,17 +21,8 @@ Metrics/MethodLength:
 Metrics/ModuleLength:
   Enabled: false
 
-Style/FrozenStringLiteralComment:
-  EnforcedStyle: never
+Style/Documentation:
+  Enabled: false
 
 Style/TrailingCommaInHashLiteral:
   EnforcedStyleForMultiline: comma
-
-Style/StringLiterals:
-  EnforcedStyle: single_quotes
-
-Naming/PredicateName:
-  Enabled: true
-
-Metrics/BlockLength:
-  Enabled: false

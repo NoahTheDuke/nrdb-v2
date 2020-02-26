@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class NrSetsController < ApplicationController
   def index
     @nr_sets = NrSet.includes(:nr_set_type, :nr_cycle)
