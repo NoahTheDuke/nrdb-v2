@@ -8,7 +8,15 @@ class SearchController < ApplicationController
     fetch_cards query
 
     params[:q] = build_query_string(query)
-    render 'cards/index', q: build_query_string(query)
+    if @cards.length == 1
+      card = @cards.first
+      redirect_to printing_path(card.printings.last.nr_set.code,
+                                card.printings.last.position,
+                                card.code,
+                                { q: build_query_string(query) })
+    else
+      render 'cards/index', q: build_query_string(query)
+    end
   end
 
   def fetch_cards(conditions)
