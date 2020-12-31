@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190605204808) do
+ActiveRecord::Schema.define(version: 20201231061001) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 20190605204808) do
     t.text "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_card_types_on_code", unique: true
   end
 
   create_table "cards", force: :cascade do |t|
@@ -47,6 +48,7 @@ ActiveRecord::Schema.define(version: 20190605204808) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["card_type_id"], name: "index_cards_on_card_type_id"
+    t.index ["code"], name: "index_cards_on_code", unique: true
     t.index ["faction_id"], name: "index_cards_on_faction_id"
     t.index ["side_id"], name: "index_cards_on_side_id"
   end
@@ -62,6 +64,7 @@ ActiveRecord::Schema.define(version: 20190605204808) do
     t.text "code", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_deck_formats_on_code", unique: true
   end
 
   create_table "factions", force: :cascade do |t|
@@ -70,6 +73,7 @@ ActiveRecord::Schema.define(version: 20190605204808) do
     t.text "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_factions_on_code", unique: true
   end
 
   create_table "legalities", force: :cascade do |t|
@@ -79,6 +83,7 @@ ActiveRecord::Schema.define(version: 20190605204808) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["card_id"], name: "index_legalities_on_card_id"
+    t.index ["deck_format_id", "card_id"], name: "index_legalities_on_deck_format_id_and_card_id", unique: true
     t.index ["deck_format_id"], name: "index_legalities_on_deck_format_id"
     t.index ["legality_type_id"], name: "index_legalities_on_legality_type_id"
   end
@@ -88,6 +93,7 @@ ActiveRecord::Schema.define(version: 20190605204808) do
     t.text "code", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_legality_types_on_code", unique: true
   end
 
   create_table "nr_cycles", force: :cascade do |t|
@@ -96,6 +102,7 @@ ActiveRecord::Schema.define(version: 20190605204808) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_nr_cycles_on_code", unique: true
   end
 
   create_table "nr_set_types", force: :cascade do |t|
@@ -104,6 +111,7 @@ ActiveRecord::Schema.define(version: 20190605204808) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_nr_set_types_on_code", unique: true
   end
 
   create_table "nr_sets", force: :cascade do |t|
@@ -115,6 +123,7 @@ ActiveRecord::Schema.define(version: 20190605204808) do
     t.integer "nr_set_type_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_nr_sets_on_code", unique: true
     t.index ["nr_cycle_id"], name: "index_nr_sets_on_nr_cycle_id"
     t.index ["nr_set_type_id"], name: "index_nr_sets_on_nr_set_type_id"
   end
@@ -133,6 +142,7 @@ ActiveRecord::Schema.define(version: 20190605204808) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["card_id"], name: "index_printings_on_card_id"
+    t.index ["code"], name: "index_printings_on_code", unique: true
     t.index ["nr_set_id"], name: "index_printings_on_nr_set_id"
   end
 
@@ -141,6 +151,7 @@ ActiveRecord::Schema.define(version: 20190605204808) do
     t.text "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_sides_on_code", unique: true
   end
 
   create_table "subtypes", force: :cascade do |t|
@@ -148,6 +159,7 @@ ActiveRecord::Schema.define(version: 20190605204808) do
     t.text "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_subtypes_on_code", unique: true
   end
 
   create_table "users", force: :cascade do |t|
