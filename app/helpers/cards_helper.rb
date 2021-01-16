@@ -36,7 +36,7 @@ module CardsHelper
         name: side[:name],
       }
     end
-    Side.import sides
+    Side.import sides, on_duplicate_key_update: { conflict_target: [ :code ], columns: :all }
   end
 
   def import_factions(path)
@@ -53,7 +53,7 @@ module CardsHelper
         name: faction[:name],
       }
     end
-    Faction.import factions
+    Faction.import factions, on_duplicate_key_update: { conflict_target: [ :code ], columns: :all }
   end
 
   def import_types(path)
@@ -69,7 +69,7 @@ module CardsHelper
         name: type[:name],
       }
     end
-    CardType.import types
+    CardType.import types, on_duplicate_key_update: { conflict_target: [ :code ], columns: :all }
   end
 
   def import_subtypes(path)
@@ -85,7 +85,7 @@ module CardsHelper
         name: subtype[:name],
       }
     end
-    Subtype.import subtypes
+    Subtype.import subtypes, on_duplicate_key_update: { conflict_target: [ :code ], columns: :all }
   end
 
   def import_cards(path: '../netrunner-data/edn/')
@@ -95,6 +95,7 @@ module CardsHelper
     types = CardType.all.index_by(&:code)
     subtypes = Subtype.all.index_by(&:code)
 
+    new_cards = []
     cards.each do |card|
       new_card = Card.new(
         advancement_requirement: card[:"advancement-requirement"],
@@ -120,8 +121,11 @@ module CardsHelper
       card[:subtype]&.each do |s|
         new_card.subtype_relations << subtypes[convert_symbol(s)]
       end
-      new_card.save
+      new_cards << new_card
     end
+    new_cards.each_slice(100) { |nc|
+      Card.import nc, on_duplicate_key_update: { conflict_target: [ :code ], columns: :all }
+    }
   end
 
   def select_cycle_code(code)
@@ -147,7 +151,7 @@ module CardsHelper
         description: cy[:description],
       }
     end
-    NrCycle.import cycles
+    NrCycle.import cycles, on_duplicate_key_update: { conflict_target: [ :code ], columns: :all }
   end
 
   def import_set_types(path)
@@ -163,7 +167,7 @@ module CardsHelper
         name: set_type[:name],
       }
     end
-    NrSetType.import set_types
+    NrSetType.import set_types, on_duplicate_key_update: { conflict_target: [ :code ], columns: :all }
   end
 
   def import_sets(path)
@@ -175,19 +179,21 @@ module CardsHelper
     File.open(path) do |file|
       sets = EDN.read(file)
     end
+
+    new_sets = []
     sets.each do |set|
       new_set = NrSet.new(
         code: set[:id],
         name: set[:name],
-        size: set[:size]
+        date_release: set[:"date-release"] ? Date.parse(set[:"date-release"]) : nil,
+        size: set[:size],
+        nr_cycle:  nr_cycles[select_cycle_code(set[:"cycle-id"])],
+        nr_set_type: set[:"set-type"] ? nr_set_types[convert_symbol(set[:"set-type"])] : nil,
       )
-      new_set.date_release = Date.parse(set[:"date-release"]) if set[:"date-release"]
-      new_set.nr_cycle = nr_cycles[select_cycle_code(set[:"cycle-id"])]
-      if set[:"set-type"]
-        new_set.nr_set_type = nr_set_types[convert_symbol(set[:"set-type"])]
-      end
-      new_set.save!
+
+      new_sets << new_set
     end
+    NrSet.import new_sets, on_duplicate_key_update: { conflict_target: [ :code ], columns: :all }
   end
 
   def import_printings(path)
@@ -195,6 +201,7 @@ module CardsHelper
     raw_cards = Card.all.index_by(&:code)
     nr_sets = NrSet.all.index_by(&:code)
 
+    new_printings = []
     set_cards.each do |set_card|
       card = raw_cards[set_card[:"card-id"]]
       nr_set = nr_sets[set_card[:"set-id"]]
@@ -212,24 +219,31 @@ module CardsHelper
       new_printing.card = card
       new_printing.nr_set = nr_set
 
-      new_printing.save
+      new_printings << new_printing
     end
+    new_printings.each_slice(100) { |np|
+      Printing.import np, on_duplicate_key_update: { conflict_target: [ :code ], columns: :all }
+    }
   end
 
   def import_legality_types
-    LegalityType.new(name: 'Legal', code: 'legal').save!
-    LegalityType.new(name: 'Not Legal', code: 'not_legal').save!
-    LegalityType.new(name: 'Restricted', code: 'restricted').save!
-    LegalityType.new(name: 'Banned', code: 'banned').save!
+    legality_types = []
+    legality_types << LegalityType.new(name: 'Legal', code: 'legal')
+    legality_types << LegalityType.new(name: 'Not Legal', code: 'not_legal')
+    legality_types << LegalityType.new(name: 'Restricted', code: 'restricted')
+    legality_types << LegalityType.new(name: 'Banned', code: 'banned')
+    LegalityType.import legality_types, on_duplicate_key_update: { conflict_target: [ :code ], columns: :all }
   end
 
   def import_formats
-    DeckFormat.new(name: 'Standard', code: 'standard').save!
-    DeckFormat.new(name: 'Eternal', code: 'eternal').save!
-    DeckFormat.new(name: 'Core Experience', code: 'core_experience').save!
-    DeckFormat.new(name: 'Snapshot', code: 'snapshot').save!
-    DeckFormat.new(name: 'Cache Refresh', code: 'cache_refresh').save!
-    DeckFormat.new(name: 'Classic', code: 'classic').save!
+    deck_formats = []
+    deck_formats << DeckFormat.new(name: 'Standard', code: 'standard')
+    deck_formats << DeckFormat.new(name: 'Eternal', code: 'eternal')
+    deck_formats << DeckFormat.new(name: 'Core Experience', code: 'core_experience')
+    deck_formats << DeckFormat.new(name: 'Snapshot', code: 'snapshot')
+    deck_formats << DeckFormat.new(name: 'Cache Refresh', code: 'cache_refresh')
+    deck_formats << DeckFormat.new(name: 'Classic', code: 'classic')
+    DeckFormat.import deck_formats, on_duplicate_key_update: { conflict_target: [ :code ], columns: :all }
   end
 
   def select_legality_type(type)
@@ -259,37 +273,53 @@ module CardsHelper
     types = LegalityType.all.index_by(&:code)
     formats = DeckFormat.all.index_by(&:code)
 
+    l = []
     raw_data[:cards].each do |card|
       card[:format].each do |ff, ll|
         next if ff == :'snapshot-plus'
 
-        Legality.new(
+        l << Legality.new(
           legality_type: types[select_legality_type(ll)],
           deck_format: formats[select_format(ff)],
           card: cards[card[:normalizedtitle]]
-        ).save!
+        )
       end
     end
+    l.each_slice(100) {|s|
+      Legality.import s, on_duplicate_key_update: { conflict_target: [ :deck_format_id, :card_id], columns: :all }
+    }
   end
 
   def import
     path = '../netrunner-data/edn/'
 
+    p '[%s] Importing sides...' % [Time.new]
     import_sides path
+    p '[%s] Importing factions...' % [Time.new]
     import_factions path
+    p '[%s] Importing types...' % [Time.new]
     import_types path
+    p '[%s] Importing subtypes...' % [Time.new]
     import_subtypes path
+    p '[%s] Importing cards...' % [Time.new]
     import_cards path: path
 
+    p '[%s] Importing cards...' % [Time.new]
     import_cycles path
+    p '[%s] Importing set types...' % [Time.new]
     import_set_types path
+    p '[%s] Importing sets...' % [Time.new]
     import_sets path
+    p '[%s] Importing printings...' % [Time.new]
     import_printings path
 
+    p '[%s] Importing legality types...' % [Time.new]
     import_legality_types
+    p '[%s] Importing formats...' % [Time.new]
     import_formats
+    p '[%s] Importing card legalities...' % [Time.new]
     import_card_legalities path
 
-    p 'Done!'
+    p '[%s] Done!' % [Time.new]
   end
 end
