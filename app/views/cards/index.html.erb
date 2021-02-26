@@ -1,6 +1,6 @@
 <% provide(:title, 'Cards') %>
 
-<%= will_paginate %>
+<%== pagy_bootstrap_nav_js(@pagy) %>
 
 <table class="rwd-table table table-striped table-condensed">
    <thead>
@@ -11,10 +11,10 @@
          <th>Type</th>
          <th title="Strength/Agenda Points/Trash Cost">&hellip;</th>
          <th>Influence</th>
-         <th>Set</th>
+         <th>Side</th>
       </tr>
    </thead>
    <%= render @cards %>
 </table>
 
-<%= will_paginate %>
+<%== pagy_bootstrap_nav_js(@pagy) %>

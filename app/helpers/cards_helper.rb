@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module CardsHelper
   def load_edn_from_dir(path)
     cards = []

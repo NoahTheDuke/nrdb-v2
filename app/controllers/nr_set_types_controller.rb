@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class NrSetTypesController < ApplicationController
   def index
-    @nr_set_types = NrSetType.all.order(:name).paginate(page: params[:page])
+    @pagy, @nr_set_types = pagy(NrSetType.all.order(:name))
   end
 
   def show

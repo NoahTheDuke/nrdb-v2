@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ImagesController < ApplicationController
   def serve
     nr_set = params[:nr_set]

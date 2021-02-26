@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class NrCyclesController < ApplicationController
   before_action :admin_user, only: %i[index edit update destroy show create new]
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PrintingsController < ApplicationController
   def show
     nr_set = params[:nr_set]
